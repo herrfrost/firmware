@@ -6,22 +6,13 @@
 //Compatible with the Arduino IDE 1.0
 //Library version:1.1
 
-// From https://github.com/slintak/brewpi-avr/tree/feature/IICdisplay
+// Modified from https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
 
 #include "TwiLcdDriver.h"
-
-#include "Brewpi.h"
-#include <stdio.h>
-#include <string.h>
-#include <inttypes.h>
-#include <inttypes.h>
-#include "Arduino.h"
-#include "Pins.h"
-
-extern "C" {
-	#include "Twi.h"
-}
-
+#include <Brewpi.h>
+#include <Pins.h>
+#include "I2C.h"
+#include <Logger.h>
 // When the display powers up, it is configured as follows:
 //
 // 1. Display clear
@@ -42,15 +33,15 @@ extern "C" {
 // LiquidCrystal constructor is called).
 
 #if BREWPI_LCD_TYPE == BREWPI_DISPLAY_TWI_LCD
-TwiLcdDriver::TwiLcdDriver(uint8_t lcd_Addr,uint8_t lcd_cols,uint8_t lcd_rows)
-{
-	_Addr = lcd_Addr;
-	_cols = lcd_cols;
-	_rows = lcd_rows;
+
+I2C I2c = I2C();
+
+TwiLcdDriver::TwiLcdDriver(){
+	_Addr = twiAddress;
+	_cols = 20;
+	_rows = 4;
 	_backlightval = LCD_NOBACKLIGHT;
 }
-
-TwiLcdDriver::TwiLcdDriver():TwiLcdDriver(twiAddress, 20, 4){};
 
 void TwiLcdDriver::init(){
 	init_priv();
@@ -59,7 +50,9 @@ void TwiLcdDriver::init(){
 
 void TwiLcdDriver::init_priv()
 {
-	twi_init();
+	I2c.begin();
+	I2c.setSpeed(true); // set 400
+	I2c.timeOut(500);
 	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
 	begin(_cols, _rows);
 }
@@ -273,7 +266,7 @@ void TwiLcdDriver::write4bits(uint8_t value) {
 
 void TwiLcdDriver::expanderWrite(uint8_t _data) {
 	uint8_t data = ((uint8_t)(_data) | _backlightval);
-	twi_writeTo(_Addr, &data, 1, true, true);
+	I2c.writeOneByte(_Addr, &data);
 }
 
 void TwiLcdDriver::pulseEnable(uint8_t _data){
@@ -290,6 +283,10 @@ void TwiLcdDriver::resetBacklightTimer(void) {
 }
 
 void TwiLcdDriver::updateBacklight(void) {
+	if(I2c.isFaulted){
+		logInfo(INFO_RESET_LCD);
+		init_priv();
+	}
 	// True = OFF, False = ON
 	bool backLightOutput = BREWPI_SIMULATE || (BACKLIGHT_AUTO_OFF_PERIOD != 0 && ticks.timeSince(_backlightTime) > BACKLIGHT_AUTO_OFF_PERIOD);
 	if(backLightOutput) {

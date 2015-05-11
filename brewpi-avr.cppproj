@@ -356,6 +356,12 @@
     <Compile Include="platform\avr\FastDigitalPin.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="platform\avr\I2C.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="platform\avr\I2C.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="platform\avr\Main.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -402,12 +408,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="platform\avr\TicksImpl.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="platform\avr\Twi.cpp">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="platform\avr\Twi.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="platform\avr\TwiLcdDriver.cpp">

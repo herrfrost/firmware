@@ -62,6 +62,7 @@
 #include <inttypes.h>
 #include "I2C.h"
 
+#include <Logger.h>
 
 
 uint8_t I2C::bytesAvailable = 0;
@@ -80,6 +81,7 @@ I2C::I2C()
 
 void I2C::begin()
 {
+	isFaulted = false;
   #if defined(__AVR_ATmega168__) || defined(__AVR_ATmega8__) || defined(__AVR_ATmega328P__)
     // activate internal pull-ups for twi
     // as per note from atmega8 manual pg167
@@ -152,44 +154,6 @@ void I2C::pullup(uint8_t activate)
     #endif
   }
 }
-
-void I2C::scan()
-{
-  uint16_t tempTime = timeOutDelay;
-  timeOut(80);
-  uint8_t totalDevicesFound = 0;
-  Serial.println("Scanning for devices...please wait");
-  Serial.println();
-  for(uint8_t s = 0; s <= 0x7F; s++)
-  {
-    returnStatus = 0;
-    returnStatus = start();
-    if(!returnStatus)
-    { 
-      returnStatus = sendAddress(SLA_W(s));
-    }
-    if(returnStatus)
-    {
-      if(returnStatus == 1)
-      {
-        Serial.println("There is a problem with the bus, could not complete scan");
-        timeOutDelay = tempTime;
-        return;
-      }
-    }
-    else
-    {
-      Serial.print("Found device at address - ");
-      Serial.print(" 0x");
-      Serial.println(s,HEX);
-      totalDevicesFound++;
-    }
-    stop();
-  }
-  if(!totalDevicesFound){Serial.println("No devices found");}
-  timeOutDelay = tempTime;
-}
-
 
 uint8_t I2C::available()
 {
@@ -340,6 +304,32 @@ uint8_t I2C::write(uint8_t address, uint8_t registerAddress, uint8_t *data, uint
     return(returnStatus);
   }
   return(returnStatus);
+}
+
+uint8_t I2C::writeOneByte(uint8_t address, uint8_t *data)
+{
+	returnStatus = 0;
+	returnStatus = start();
+	if (returnStatus){ return(returnStatus); }
+	returnStatus = sendAddress(SLA_W(address));
+	if (returnStatus)
+	{
+		if (returnStatus == 1){ return(2); }
+		return(returnStatus);
+	}
+	returnStatus = sendByte(data[0]);
+	if (returnStatus)
+	{
+		if (returnStatus == 1){ return(3); }
+		return(returnStatus);
+	}
+	returnStatus = stop();
+	if (returnStatus)
+	{
+		if (returnStatus == 1){ return(7); }
+		return(returnStatus);
+	}
+	return(returnStatus);
 }
 
 uint8_t I2C::read(int address, int numberBytes)
@@ -701,9 +691,10 @@ uint8_t I2C::stop()
 
 void I2C::lockUp()
 {
+  logError(ERROR_TWI_WRITE);
+  isFaulted = true;
   TWCR = 0; //releases SDA and SCL lines to high impedance
   TWCR = _BV(TWEN) | _BV(TWEA); //reinitialize TWI 
 }
 
-I2C I2c = I2C();
 

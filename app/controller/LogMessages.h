@@ -29,7 +29,7 @@
 */
 
 /* bump this version number when changing this file and copy the new version to the brewpi-script repository. */
-#define BREWPI_LOG_MESSAGES_VERSION 1
+#define BREWPI_LOG_MESSAGES_VERSION 2
 
 #define MSG(errorID, errorString, ...) errorID
 
@@ -52,6 +52,9 @@ enum errorMessages{
 // PiLink.cpp
 	MSG(ERROR_EXPECTED_BRACKET, "Expected { got %c", character),
 	
+// TwiLcdDriver.cpp
+	MSG(ERROR_TWI_WRITE, "I2c in lockup, setting isFaulted.")
+
 }; // END enum errorMessages
 
 enum warningMessages{
@@ -64,6 +67,7 @@ enum warningMessages{
 
 // SettingsManager.cpp	
 	MSG(WARNING_START_IN_SAFE_MODE, "EEPROM Settings not available. Starting in safe mode.")
+
 }; // END enum warningMessages
 
 // Info messages
@@ -95,5 +99,9 @@ enum infoMessages{
 	MSG(INFO_POSITIVE_PEAK, "Positive peak detected: %s, estimated: %s. Previous heat estimator: %s, New heat estimator: %s.", temperature, temperature, estimator, estimator),
 	MSG(INFO_NEGATIVE_PEAK, "Negative peak detected: %s, estimated: %s. Previous cool estimator: %s, New cool estimator: %s.", temperature, temperature, estimator, estimator),
 	MSG(INFO_POSITIVE_DRIFT, "No peak detected. Drifting up after heating, current temp: %s, estimated peak: %s. Previous heat estimator: %s, New heat estimator: %s..", temperature, temperature, estimator, estimator),
-	MSG(INFO_NEGATIVE_DRIFT, "No peak detected. Drifting down after cooling, current temp: %s, estimated peak: %s. Previous cool estimator: %s, New cool estimator: %s..", temperature, temperature, estimator, estimator)	
+	MSG(INFO_NEGATIVE_DRIFT, "No peak detected. Drifting down after cooling, current temp: %s, estimated peak: %s. Previous cool estimator: %s, New cool estimator: %s..", temperature, temperature, estimator, estimator),
+
+// TwiLcdDriver.cpp
+	MSG(INFO_RESET_LCD, "I2c has had a timeout; reinitializing.")
+
 }; // END enum infoMessages
