@@ -3,7 +3,7 @@
  - Supports ATmego328P (e.g. Uno, nano)
  - Config.h & #define selectable
  - Not reliant on twi.h, which is prone to busy waiting on a less than ideal i2c/twi bus. Busy waiting effectively hangs the MCU - ask me how I know and how low my fridge can go. :)
- - TWI/I2C bus timeouts added - detects if LCD becomes garbled and resets it.
+ - TWI/I2C bus timeouts added - detects if LCD ~~becomes~~ is likely garbled and resets it.
  - I2C-Master modified as to not cause LCD backlight flicker.
  - Currently using a new shield type (forked brewpi-script needed as well). The one wire pin (for mainly sensors) is  hard coded in brewpi to a A4 (SDA) so it has to move. There are better ways to implement this however, ideally without creating a new shield type.
 
