@@ -16,7 +16,6 @@ typedef uint16_t ticks_seconds_t;
 typedef uint8_t ticks_seconds_tiny_t;
 
 #include "TicksWiring.h"
-
 // Determine the type of Ticks needed
 // TICKS_IMPL_CONFIG is the code string passed to the constructor of the Ticks implementation
 
@@ -28,6 +27,7 @@ typedef uint8_t ticks_seconds_tiny_t;
 #elif BREWPI_EMULATE
 /** When debugging in AVR studio (and running normal brewpi - not the simulator), use a simple MockTicks that increments 100
 	millis each time it's called. */	
+	class MockTicks;
 	typedef MockTicks TicksImpl;
 	#define TICKS_IMPL_CONFIG 100	
 	
@@ -43,6 +43,7 @@ extern TicksImpl ticks;
 // For regular code, use the arduino delay function.
 
 #if BREWPI_EMULATE || !defined(ARDUINO)
+class NoOpDelay;
 typedef NoOpDelay DelayImpl;		// for emulation (avr debugger), don't bother delaying, it takes ages.
 #define DELAY_IMPL_CONFIG
 #else
