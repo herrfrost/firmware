@@ -1,5 +1,5 @@
 ## TWI/I2C added to Brewpi. 
-
+ - Latest available code base from Brewpi at this time
  - Supports ATmego328P (e.g. Uno, nano)
  - Config.h & #define selectable
  - Not reliant on twi.h, which is prone to busy waiting on a less than ideal i2c/twi bus. Busy waiting effectively hangs the MCU - ask me how I know and how low my fridge can go. :)
