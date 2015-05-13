@@ -11,6 +11,13 @@
  - I2CMaster (twi.h replacement): http://www.dsscircuits.com/articles/86-articles/66-arduino-i2c-master-library
  - https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
 
+## To use
+- Copy and modify /app/controller/Config.h to /app/controller/Config.h
+- Modify accordingly
+- Build project in Atmel Studo (6.2(
+- Upload hex file in Brewpi web UI
+- Use updated files from https://github.com/herrfrost/brewpi-script/tree/feature/TWI and add to script folder
+
 ## Default pinout for shield "diy_twi" (also reflected in the forked brewpi-script repo):
 
 Pin | Uno  | BrewPi RevC | DIY_TWI
