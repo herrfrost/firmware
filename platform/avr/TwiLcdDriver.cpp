@@ -1,25 +1,13 @@
-//YWROBOT
-//last updated on 21/12/2011
-//Tim Starling Fix the reset bug (Thanks Tim)
-//wiki doc http://www.dfrobot.com/wiki/index.php?title=I2C/TWI_LCD1602_Module_(SKU:_DFR0063)
-//Support Forum: http://www.dfrobot.com/forum/
-//Compatible with the Arduino IDE 1.0
-//Library version:1.1
-
-// Modified from https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
-
 #include "TwiLcdDriver.h"
 #include <Brewpi.h>
 #include <Pins.h>
-#include "I2C.h"
-#include <Logger.h>
 
 #if BREWPI_LCD_TYPE == BREWPI_DISPLAY_TWI_LCD
 
-I2C I2c = I2C();
+#include "SoftI2CMaster.h"
 
 TwiLcdDriver::TwiLcdDriver(){
-	_Addr = twiAddress;
+	_Addr = TWI_ADDRESS;
 	_cols = 20;
 	_rows = 4;
 	_backlightval = LCD_NOBACKLIGHT;
@@ -32,9 +20,8 @@ void TwiLcdDriver::init(){
 
 void TwiLcdDriver::init_priv()
 {
-	I2c.begin();
-	I2c.setSpeed(true); // set 400
-	I2c.timeOut(1000);
+	i2c_init();
+	i2c_start((_Addr << 1) | I2C_WRITE);
 	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
 	begin(_cols, _rows);
 }
@@ -199,8 +186,6 @@ void TwiLcdDriver::backlight(void) {
 	expanderWrite(0);
 }
 
-
-
 /*********** mid level commands, for sending data/cmds */
 
 inline void TwiLcdDriver::command(uint8_t value) {
@@ -233,7 +218,9 @@ void TwiLcdDriver::write4bits(uint8_t value) {
 
 void TwiLcdDriver::expanderWrite(uint8_t _data) {
 	uint8_t data = ((uint8_t)(_data) | _backlightval);
-	I2c.writeOneByte(_Addr, &data);
+	i2c_start_wait((_Addr << 1) | I2C_WRITE);
+	i2c_write(data);
+	i2c_stop();
 }
 
 void TwiLcdDriver::pulseEnable(uint8_t _data){
@@ -249,10 +236,6 @@ void TwiLcdDriver::resetBacklightTimer(void) {
 }
 
 void TwiLcdDriver::updateBacklight(void) {
-	if(I2c.isFaulted){
-		logInfo(INFO_RESET_LCD);
-		init_priv();
-	}
 	// True = OFF, False = ON
 	bool backLightOutput = BREWPI_SIMULATE || (BACKLIGHT_AUTO_OFF_PERIOD != 0 && ticks.timeSince(_backlightTime) > BACKLIGHT_AUTO_OFF_PERIOD);
 	if(backLightOutput) {
