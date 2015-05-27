@@ -1,66 +1,49 @@
+## TWI/I2C added to Brewpi. 
+ - Latest available code base from Brewpi at this time
+ - Supports ATmego328P (e.g. Uno, nano)
+ - Config.h & #define selectable
+ - Not reliant on twi.h, which is prone to busy waiting on a less than ideal i2c/twi bus. Busy waiting effectively hangs the MCU - ask me how I know and how low my fridge can go. :)
+ - TWI/I2C bus timeouts added - detects if LCD ~~becomes~~ is likely garbled and resets it.
+ - I2C-Master modified as to not cause LCD backlight flicker.
+ - Currently using a new shield type (forked brewpi-script needed as well). The one wire pin (for mainly sensors) is  hard coded in brewpi to a A4 (SDA) so it has to move. There are better ways to implement this however, ideally without creating a new shield type.
 
-This is the main source code repository  for the firmware on the BrewPi brewing temperature controller.
+## Modified code from:
+ - I2CMaster (twi.h replacement): http://www.dsscircuits.com/articles/86-articles/66-arduino-i2c-master-library
+ - https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
 
+## To use
+- Copy and modify /app/controller/Config.h to /app/controller/Config.h
+- Modify accordingly
+- Build project in Atmel Studo (6.2(
+- Upload hex file in Brewpi web UI
+- Use updated files from https://github.com/herrfrost/brewpi-script/tree/feature/TWI and add to script folder
 
-## Getting started
-End users will not have to compile the firmware themselves.
+## Default pinout for shield "diy_twi" (also reflected in the forked brewpi-script repo):
 
-We provide pre-compiled binaries [in releases](https://github.com/BrewPi/firmware/releases).
-
-
-## Updating your controller
-Our update script (part of [brewpi-tools](https://github.com/elcojacobs/brewpi-tools)) automatically downloads the latest release to flash to your controller.
-
-To update your controller, the brewpi script and the web interface, you will generally just run:
-```
-cd ~/brewpi-tools
-sudo python updater.py
-```
-
-You can also upload to your controller from the BrewPi web interface. For the Spark Core, this requires that you already have a version of BrewPi running on it. If not, read how to flash via DFU below.
-
-
-## Building the firmware for Spark
-If you want to make your own changes to the firmware, follow these steps:
-
-Clone this repository and [spark-firmware](https://github.com/spark/firmware)  to the same parent folder (e.g. 'brewpi'). This repository depends on the `spark-firmware` repository to build.
-
-- In the spark-firmware repo, change to the "feature/hal" branch: `git checkout feature/hal`
-- in the firmwarwe repo, it is recommended to change to the "develop" branch: `git checkout develop`
-
-Then browse to `platform/spark/` in the `firmware` repo and run make:
-
-```
-cd platform/spark
-make
-```
-
-This will build the binary to the file `platform/spark/target/brewpi.bin`. You can upload your new binary via the BrewPi web interface.
-
-The repository contains a NetBeans project. NetBeans is our editor of choice for development and hardware debugging.
-
-
-## Flashing the firmware via DFU
-If uploading firmware via the web interface fails, you can flash new firmware to your Spark Core with dfu-util. Please refer to this [guide on our community forum](https://community.brewpi.com/t/flashing-the-core-without-the-web-interface-fresh-core-or-in-case-of-emergency/).
-
-You can also build the firmware and flash directly by running `make progra-dfu` from `platform/spark`.
-
-
-## Building the firmware for Arduino
-We do not recommend the Arduino to new users. The Spark platform is much more powerful and future proof. We will try to make new features available where possible for our existing Arduino users, but we are running into the limits of the platform.
-
-To build our firmware for Arduino, you will have to use [Atmel Studio](http://www.atmel.com/microsite/atmel_studio6/). The repo includes an Atmel studio project. Select the right processor (Atmega328P for the Arduino Uno, Atmega32U4 for the Leonardo) and set up the right shield in Config.h.
-
-
-## Changelog
-A list of the changes per release can be found in the CHANGELOG file.
-
-
-## License
-Unless stated elsewhere, file headers or otherwise, all files herein are licensed under an GPLv3 license. For more information, please read the LICENSE file.
-
-
-## Contribute
-Contributions to our firmware are very welcome. Please contact us first via our [community forum](https://community.brewpi.com/) to discuss what you want to code to make sure that it aligns with our road map.
-
-Please send pull requests against the develop branch. We can only accept your pull request if you have signed our [Contributor License Agreement (CLA)](http://www.brewpi.com/cla/).
+Pin | Uno  | BrewPi RevC | DIY_TWI
+--- | ----- | -------- | -----
+0|Serial RX | Serial | Serial
+1|Serial TX | Serial| Serial
+2|INT0 | Actuator 3|Actuator 3
+3|INT1, PWM|Beep|Beep
+4||  Door sensor| Door sensor
+5|PWM | Actuator 2|Actuator 2
+6|PWM | Actuator 1  |Actuator 1
+7|| Rotary|Rotary
+8||   Rotary|Rotary
+9| PWM | Rotary | Rotary
+10| SPI SS, PWM |  SPI (LCD)	
+11| SPI MOSI, PWM | SPI (LCD)	
+12| SPI MISO | SPI (LCD)	
+13| SPI SCK, LED | SPI (LCD)	
+A0|||			
+A1|||			
+A2||| OneWire
+A3||| Actuator 4
+A4| TWI SDA | OneWire | TWI SDA (LCD)
+A5| TWI SCL | Actuator 4 | TWI SCL (LCD)
+			
+		Notes	
+		Buzzer requires PWM.	
+		TWI is Atmel's name for I2C.
+		
