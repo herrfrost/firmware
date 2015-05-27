@@ -13,24 +13,6 @@
 #include <Pins.h>
 #include "I2C.h"
 #include <Logger.h>
-// When the display powers up, it is configured as follows:
-//
-// 1. Display clear
-// 2. Function set:
-//    DL = 1; 8-bit interface data
-//    N = 0; 1-line display
-//    F = 0; 5x8 dot character font
-// 3. Display on/off control:
-//    D = 0; Display off
-//    C = 0; Cursor off
-//    B = 0; Blinking off
-// 4. Entry mode set:
-//    I/D = 1; Increment by 1
-//    S = 0; No shift
-//
-// Note, however, that resetting the Arduino doesn't reset the LCD, so we
-// can't assume that its in that state when a sketch starts (and the
-// LiquidCrystal constructor is called).
 
 #if BREWPI_LCD_TYPE == BREWPI_DISPLAY_TWI_LCD
 
@@ -52,7 +34,7 @@ void TwiLcdDriver::init_priv()
 {
 	I2c.begin();
 	I2c.setSpeed(true); // set 400
-	I2c.timeOut(500);
+	I2c.timeOut(1000);
 	_displayfunction = LCD_4BITMODE | LCD_1LINE | LCD_5x8DOTS;
 	begin(_cols, _rows);
 }
@@ -61,41 +43,26 @@ void TwiLcdDriver::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) {
 	if (lines > 1) {
 		_displayfunction |= LCD_2LINE;
 	}
+	
 	_numlines = lines;
 	_currline = 0;
 	_currpos = 0;
 
-	// for some 1 line displays you can select a 10 pixel high font
-	if ((dotsize != 0) && (lines == 1)) {
-		_displayfunction |= LCD_5x10DOTS;
-	}
 
-	// SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-	// according to datasheet, we need at least 40ms after power rises above 2.7V
-	// before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
 	delay(50);
 
 	// Now we pull both RS and R/W low to begin commands
 	expanderWrite(_backlightval);	// reset expanderand turn backlight off (Bit 8 =1)
 	delay(1000);
 
-	//put the LCD into 4 bit mode
 	// this is according to the hitachi HD44780 datasheet
-	// figure 24, pg 46
-
 	// we start in 8bit mode, try to set 4 bit mode
-	write4bits(0x03 << 4);
+	write4bits(0x03 << 4); // set to 8-bit
 	delayMicroseconds(4500); // wait min 4.1ms
-
-	// second try
-	write4bits(0x03 << 4);
+	write4bits(0x03 << 4); // set to 8-bit
 	delayMicroseconds(4500); // wait min 4.1ms
-
-	// third go!
 	write4bits(0x03 << 4);
 	delayMicroseconds(150);
-
-	// finally, set to 4-bit interface
 	write4bits(0x02 << 4);
 
 
@@ -277,7 +244,6 @@ void TwiLcdDriver::pulseEnable(uint8_t _data){
 	delayMicroseconds(50);		// commands need > 37us to settle
 }
 
-// This resets the backlight timer and updates the SPI output
 void TwiLcdDriver::resetBacklightTimer(void) {
 	_backlightTime = ticks.seconds();
 }

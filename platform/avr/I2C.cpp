@@ -63,7 +63,7 @@
 #include "I2C.h"
 
 #include <Logger.h>
-
+#include "Ticks.h"
 
 uint8_t I2C::bytesAvailable = 0;
 uint8_t I2C::bufferIndex = 0;
@@ -553,12 +553,12 @@ uint8_t I2C::read(uint8_t address, uint8_t registerAddress, uint8_t numberBytes,
 
 uint8_t I2C::start()
 {
-  unsigned long startingTime = millis();
+  unsigned long startingTime = ticks.millis();
   TWCR = (1<<TWINT)|(1<<TWSTA)|(1<<TWEN);
   while (!(TWCR & (1<<TWINT)))
   {
     if(!timeOutDelay){continue;}
-    if((millis() - startingTime) >= timeOutDelay)
+    if((ticks.millis() - startingTime) >= timeOutDelay)
     {
       lockUp();
       return(1);
@@ -581,12 +581,12 @@ uint8_t I2C::start()
 uint8_t I2C::sendAddress(uint8_t i2cAddress)
 {
   TWDR = i2cAddress;
-  unsigned long startingTime = millis();
+  unsigned long startingTime = ticks.millis();
   TWCR = (1<<TWINT) | (1<<TWEN);
   while (!(TWCR & (1<<TWINT)))
   {
     if(!timeOutDelay){continue;}
-    if((millis() - startingTime) >= timeOutDelay)
+    if((ticks.millis() - startingTime) >= timeOutDelay)
     {
       lockUp();
       return(1);
@@ -613,12 +613,12 @@ uint8_t I2C::sendAddress(uint8_t i2cAddress)
 uint8_t I2C::sendByte(uint8_t i2cData)
 {
   TWDR = i2cData;
-  unsigned long startingTime = millis();
+  unsigned long startingTime = ticks.millis();
   TWCR = (1<<TWINT) | (1<<TWEN);
   while (!(TWCR & (1<<TWINT)))
   {
     if(!timeOutDelay){continue;}
-    if((millis() - startingTime) >= timeOutDelay)
+    if((ticks.millis() - startingTime) >= timeOutDelay)
     {
       lockUp();
       return(1);
@@ -657,7 +657,7 @@ uint8_t I2C::receiveByte(uint8_t ack)
   while (!(TWCR & (1<<TWINT)))
   {
     if(!timeOutDelay){continue;}
-    if((millis() - startingTime) >= timeOutDelay)
+    if((ticks.millis() - startingTime) >= timeOutDelay)
     {
       lockUp();
       return(1);
@@ -674,12 +674,12 @@ uint8_t I2C::receiveByte(uint8_t ack)
 
 uint8_t I2C::stop()
 {
-  unsigned long startingTime = millis();
+  unsigned long startingTime = ticks.millis();
   TWCR = (1<<TWINT)|(1<<TWEN)| (1<<TWSTO);
   while ((TWCR & (1<<TWSTO)))
   {
     if(!timeOutDelay){continue;}
-    if((millis() - startingTime) >= timeOutDelay)
+    if((ticks.millis() - startingTime) >= timeOutDelay)
     {
       lockUp();
       return(1);
