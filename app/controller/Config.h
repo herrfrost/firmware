@@ -65,10 +65,10 @@
 // Set TWI/I2C LCD parameters
 //
 #define TWI_ADDRESS		0x27
-#define SDA_PIN			4
-#define SDA_PORT		PORTC
-#define SCL_PIN			5
-#define SCL_PORT		PORTC
+#define SDA_PIN			2
+#define SDA_PORT		PORTB
+#define SCL_PIN			3
+#define SCL_PORT		PORTB
 #define I2C_FASTMODE	1
 #define I2C_NOINTERRUPT	1
 #define I2C_TIMEOUT		500
@@ -119,7 +119,7 @@
 //////////////////////////////////////////////////////////////////////////
 //
 // Flag to control implementation of TempControl as a static class.
-// Should normally be left alone unles you are experimenting with multi-instancing.
+// Should normally be left alone unless you are experimenting with multi-instancing.
 //
 // #ifndef TEMP_CONTROL_STATIC
 // #define TEMP_CONTROL_STATIC 1
@@ -160,7 +160,7 @@
 //////////////////////////////////////////////////////////////////////////
 //
 // #ifndef BREWPI_ROTARY_ENCODER
-// #define BREWPI_ROTARY_ENCODER 1
+#define BREWPI_ROTARY_ENCODER 0
 // #endif
 //
 //////////////////////////////////////////////////////////////////////////

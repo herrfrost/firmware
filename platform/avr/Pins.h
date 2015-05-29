@@ -43,8 +43,7 @@
 #if BREWPI_STATIC_CONFIG==BREWPI_SHIELD_REV_C
 
 #ifndef oneWirePin
-//#define oneWirePin A4
-#define oneWirePin A2
+#define oneWirePin A4
 #endif
 
 #ifndef actuatorPin1
