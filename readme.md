@@ -21,7 +21,7 @@
 Not related to I2C bus implementation, however it might be interesting for DIYers; many Arduino Nano clones from China are using the WCH 340 chip. The linux driver for that has a bug causing pyserial to reopen the port at an incorrect baud rate. It will manifest as serial line gibbersh after the serial port reopens, e.g. just before programming and when restarting the brewpi script. 
 
 A hack to work around it is to make the following modifications to /home/brewpi/BrewPiUtil.py:
-
+```
 def setupSerial(config, baud_rate=57600, time_out=0.1):
     """
     HACK: replaced method due to ch341 driver bug used for some Arduino Nano clones
@@ -32,7 +32,7 @@ def setupSerial(config, baud_rate=57600, time_out=0.1):
 
 def setupSerialReal(config, baud_rate=57600, time_out=0.1):
 [...]
-
+```
 
 Pin | Uno  | BrewPi RevC | BrewPi RevC I2C
 --- | ----- | -------- | -----
