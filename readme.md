@@ -14,6 +14,7 @@
 - Copy and modify /app/controller/Config.h to /app/controller/Config.h
 - Modify accordingly
 - Build project in Atmel Studo v6.2
+- makefile _not_ updated
 - Upload hex file in Brewpi web UI
 - Use revC style pinout - except that pin 10 and 11 are SDA and SCL (i.e. I2C/TWI) respectively.
 
@@ -33,6 +34,9 @@ def setupSerial(config, baud_rate=57600, time_out=0.1):
 def setupSerialReal(config, baud_rate=57600, time_out=0.1):
 [...]
 ```
+
+## Pins
+Most can be changed in code and in the web UI, however, and apart from occupying the hardware I2C_SDA pin, the onewire pin is hard-coded in multiple places. The only way to reasonably change it is to add another shield type. That adds needless complexity without addressing the underlying problem; hence a software I2C implementation.
 
 Pin | Uno  | BrewPi RevC | BrewPi RevC I2C
 --- | ----- | -------- | -----
