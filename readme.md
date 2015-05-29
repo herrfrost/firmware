@@ -6,7 +6,7 @@
   
 - Using the same pinout as the revC shield is possible, thus preserving the hard-coded onewire pin occupying one of the pins required for hardware i2c/twi.
 
-## Modified code from:
+## Includes code from:
  - Peter Fleury's assembler code http://homepage.hispeed.ch/peterfleury/avr-software.html adapted by feliasfogg (https://github.com/felias-fogg/SoftI2CMaster)
  - https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
 
