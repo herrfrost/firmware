@@ -14,4 +14,33 @@
 - Modify accordingly
 - Build project in Atmel Studo (6.2(
 - Upload hex file in Brewpi web UI
-- Presently: I use non-revC pinout, so take note of Pins.h
+- Use revC style pinout - except that pin 10 and 11 are SDA and SCL (i.e. I2C/TWI) respectively.
+
+
+Pin | Uno  | BrewPi RevC | BrewPi RevC I2C
+--- | ----- | -------- | -----
+0|Serial RX | Serial | Serial
+1|Serial TX | Serial| Serial
+2|INT0 | Actuator 3|Actuator 3
+3|INT1, PWM|Beep|Beep
+4||  Door sensor| Door sensor
+5|PWM | Actuator 2|Actuator 2
+6|PWM | Actuator 1  |Actuator 1
+7|| Rotary|Rotary
+8||   Rotary|Rotary
+9| PWM | Rotary | Rotary
+10| SPI SS, PWM |SPI (LCD)|  SDA (LCD)	
+11| SPI MOSI, PWM |SPI (LCD)| SCL (LCD)	
+12| SPI MISO | 	
+13| SPI SCK, LED |
+A0|||			
+A1|||			
+A2||| 
+A3||| 
+A4| TWI SDA | OneWire | OneWire
+A5| TWI SCL | Actuator 4 | Actuator 4
+			
+		Notes	
+		Buzzer requires PWM.	
+		TWI is Atmel's name for I2C.
+		
