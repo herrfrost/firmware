@@ -3,7 +3,8 @@
  - Supports ATmego328P (e.g. Uno, nano)
  - Config.h & #define selectable
  - Not reliant on twi.h, which is prone to busy waiting on a less than ideal i2c/twi bus. Busy waiting effectively hangs the MCU - ask me how I know and how low my fridge can go. :)
-  - Using the same pinout as the revC shield is possible, thus preserving the hard-coded onewire pin occupying one of the pins required for hardware i2c/twi.
+  
+- Using the same pinout as the revC shield is possible, thus preserving the hard-coded onewire pin occupying one of the pins required for hardware i2c/twi.
 
 ## Modified code from:
  - Peter Fleury's assembler code http://homepage.hispeed.ch/peterfleury/avr-software.html adapted by feliasfogg (https://github.com/felias-fogg/SoftI2CMaster)
@@ -12,7 +13,7 @@
 ## To use
 - Copy and modify /app/controller/Config.h to /app/controller/Config.h
 - Modify accordingly
-- Build project in Atmel Studo (6.2(
+- Build project in Atmel Studo v6.2
 - Upload hex file in Brewpi web UI
 - Use revC style pinout - except that pin 10 and 11 are SDA and SCL (i.e. I2C/TWI) respectively.
 
@@ -29,10 +30,10 @@ Pin | Uno  | BrewPi RevC | BrewPi RevC I2C
 7|| Rotary|Rotary
 8||   Rotary|Rotary
 9| PWM | Rotary | Rotary
-10| SPI SS, PWM |SPI (LCD)|  SDA (LCD)	
-11| SPI MOSI, PWM |SPI (LCD)| SCL (LCD)	
-12| SPI MISO | 	
-13| SPI SCK, LED |
+10| SPI SS, PWM |SPI (LCD)| ASM_SDA (LCD)	
+11| SPI MOSI, PWM |SPI (LCD)| ASM_SCL (LCD)	
+12| SPI MISO | SPI (LCD)|
+13| SPI SCK, LED | SPI (LCD)|
 A0|||			
 A1|||			
 A2||| 
