@@ -17,6 +17,8 @@
 - makefile _not_ updated
 - Upload hex file in Brewpi web UI
 - Use revC style pinout - except that pin 10 and 11 are SDA and SCL (i.e. I2C/TWI) respectively.
+- You *must* use external pullups on both SDA and SCL - around 2 kΩ.
+
 
 ## Notes
 Not related to I2C bus implementation, however it might be interesting for DIYers; many Arduino Nano clones from China are using the WCH 340 chip. The linux driver for that has a bug causing pyserial to reopen the port at an incorrect baud rate. It will manifest as serial line gibbersh after the serial port reopens, e.g. just before programming and when restarting the brewpi script. 
