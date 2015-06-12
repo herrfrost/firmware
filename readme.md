@@ -17,7 +17,7 @@
 - makefile _not_ updated
 - Upload hex file in Brewpi web UI
 - Use revC style pinout - except that pin 10 and 11 are SDA and SCL (i.e. I2C/TWI) respectively.
-- You *must* use external pullups on both SDA and SCL - around 2 kΩ.
+- You **must** use external pullups on both SDA and SCL - around 2 kΩ.
 
 
 ## Notes
