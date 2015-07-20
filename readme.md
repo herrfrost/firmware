@@ -1,3 +1,8 @@
+## This version is reliant on hardware twi/i2c. It's clunky to implement in brewpi presently, thus the need for a new board type. That in turns requires changes to the python back-end.
+
+Use https://github.com/herrfrost/firmware/tree/feature/SoftwareI2C if you're determined to use your i2c display.
+
+
 ## TWI/I2C added to Brewpi. 
  - Latest available code base from Brewpi at this time
  - Supports ATmego328P (e.g. Uno, nano)
