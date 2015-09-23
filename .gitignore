@@ -5,4 +5,4 @@ nbproject/private/
 revA/
 revC/
 test/obj/
-/app/controller/Config.h
+app/controller/Config.h
