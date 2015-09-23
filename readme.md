@@ -11,7 +11,7 @@
  - https://github.com/slintak/brewpi-avr/blob/feature/IICdisplay/brewpi_avr/IicLcd.cpp
 
 ## To use
-- Copy and modify /app/controller/Config.h to /app/controller/Config.h
+- Copy and modify /app/fallback/Config.h to /app/controller/Config.h
 - Modify accordingly
 - Build project in Atmel Studo v6.2
 - makefile _not_ updated
