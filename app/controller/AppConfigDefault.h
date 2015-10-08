@@ -82,7 +82,7 @@
 #endif
 
 #ifndef BUILD_NAME
-#define BUILD_NAME herrfrost
+#define BUILD_NAME unofficial
 #endif
 
 /**
