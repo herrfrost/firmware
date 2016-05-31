@@ -23,9 +23,11 @@
 #include "Display.h"
 #include "DisplayLcd.h"
 #include "TempControl.h"
-#include "Pins.h"
+#include "Board.h"
 #include "fixstl.h"
+#include <algorithm>
 
+using std::min;
 
 
 uint8_t LcdDisplay::stateOnDisplay;

@@ -27,10 +27,13 @@
 
 // Most pins are only conditionally defined here, allowing definitions to be provided in Config.h for
 // local overrides
-#define BREWPI_SHIELD_DIY   0
-#define BREWPI_SHIELD_REV_A	1
-#define BREWPI_SHIELD_REV_C	2
-#define BREWPI_SHIELD_SPARK_REV_C 3
+enum {
+	BREWPI_SHIELD_DIY,
+	BREWPI_SHIELD_REV_A,
+	BREWPI_SHIELD_REV_C,
+	BREWPI_SHIELD_SPARK_V1,
+	BREWPI_SHIELD_SPARK_V2
+};
 
 #define BREWPI_BOARD_LEONARDO 'l'
 #define BREWPI_BOARD_STANDARD 's'
@@ -38,6 +41,8 @@
 #define BREWPI_BOARD_SPARKCORE 'x'
 #define BREWPI_BOARD_PHOTON 'y'
 #define BREWPI_BOARD_UNKNOWN '?'
+
+bool platform_init();
 
 /*
  * Defines global config for the brewpi project. This file is included in every file in the project to ensure conditional
